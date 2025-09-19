@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Busca Digital Imóveis</title>
+  <link rel="stylesheet" href="/style.css" />
+  <!-- PWA essentials -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0E2A47">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <script>
+    // window.API_URL = 'https://SUA-API-AQUI'; // (auto-config ativo abaixo)
+  </script>
+  <script>
+    // Auto-config: define window.API_URL se não estiver definido
+    (function(){
+      if (window.API_URL && !String(window.API_URL).includes('SUA-API-AQUI')) return;
+      try {
+        const host = window.location.host;
+        const parts = host.split('.');
+        if (parts[0] === 'www') parts.shift();
+        const apex = parts.join('.');
+        if (apex.split('.').length >= 2 && !apex.endsWith('pages.dev')) {
+          window.API_URL = 'https://api.' + apex;
+        } else {
+          window.API_URL = 'https://SUA-API-DO-RENDER.onrender.com';
+        }
+      } catch (e) {
+        window.API_URL = '';
+      }
+    })();
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js')
+          .catch(err => console.log('SW registration failed', err));
+      });
+    }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logoD">D</div>
+      <div class="brand-text"><strong>BUSCA DIGITAL</strong><span>IMÓVEIS</span></div>
+    </div>
+    <div class="actions">
+      <button id="btnSave" class="btn primary">Salvar busca</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="searchbar">
+      <input id="q" type="text" placeholder="Bairro, rua ou estação…" />
+      <div class="chip-group">
+        <button data-purpose="comprar" class="chip active">Comprar</button>
+        <button data-purpose="alugar" class="chip">Alugar</button>
+        <button data-purpose="lancamento" class="chip">Lançamentos</button>
+      </div>
+      <button id="btnSearch" class="btn ghost">Buscar</button>
+    </div>
+  </section>
+
+  <main class="grid">
+    <section class="panel">
+      <div class="panel-head">
+        <h3>Mapa (protótipo)</h3>
+        <button class="btn ghost small" id="btnReset">Redefinir área</button>
+      </div>
+      <div id="map" class="map"></div>
+      <div class="hint">Mapa ilustrativo. Clique nos pins para rolar até o card.</div>
+    </section>
+
+    <section class="results">
+      <div class="toolbar">
+        <span id="count">0 resultados</span>
+        <button class="btn ghost small" id="btnFilter">Filtros</button>
+      </div>
+      <div id="cards" class="cards"></div>
+    </section>
+  </main>
+
+  <dialog id="filters">
+    <h3>Filtros</h3>
+    <label>Quartos
+      <select id="rooms">
+        <option value="">Qualquer</option>
+        <option>1</option><option>2</option><option>3</option>
+      </select>
+    </label>
+    <label>Distância do metrô
+      <select id="metro">
+        <option value="">Sem filtro</option>
+        <option value="300">Até 300 m</option>
+        <option value="600">Até 600 m</option>
+        <option value="800">Até 800 m</option>
+      </select>
+    </label>
+    <div class="row">
+      <button class="btn primary" id="apply">Aplicar</button>
+      <button class="btn ghost" id="close">Fechar</button>
+    </div>
+  </dialog>
+
+  <dialog id="saveSearch">
+    <h3>Receba alertas no WhatsApp</h3>
+    <input placeholder="Seu nome" />
+    <input placeholder="WhatsApp (com DDD)" />
+    <div class="row">
+      <button class="btn primary" id="okSave">Ativar</button>
+      <button class="btn ghost" id="closeSave">Fechar</button>
+    </div>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>
